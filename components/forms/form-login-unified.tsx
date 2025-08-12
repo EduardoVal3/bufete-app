@@ -187,6 +187,28 @@ export function UnifiedLoginForm({
                   Volver al inicio
                 </Link>
               </div>
+
+              {/* Texto de ayuda para demo */}
+              <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <h4 className="text-sm font-medium text-blue-900 mb-2">
+                  🚀 Credenciales de Demo
+                </h4>
+                <div className="text-xs text-blue-700 space-y-2">
+                  <div>
+                    <strong>Administrador:</strong><br/>
+                    📧 admin@lexfirm.com<br/>
+                    🔑 Admin123!
+                  </div>
+                  <div>
+                    <strong>Cliente:</strong><br/>
+                    📧 pepito@gmail.com<br/>
+                    🔑 Pepito123!
+                  </div>
+                </div>
+                <p className="text-xs text-blue-600 mt-2 italic">
+                  Usa estas credenciales para probar la aplicación
+                </p>
+              </div>
             </div>
           </form>
         </CardContent>
