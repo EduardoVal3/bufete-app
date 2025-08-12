@@ -1,0 +1,471 @@
+@startuml Diagrama de Clases - Sistema de Bufete de Abogados
+
+' Configuración del diagrama
+!define RECTANGLE class
+skinparam class {
+    BackgroundColor lightblue
+    BorderColor darkblue
+    ArrowColor darkblue
+}
+
+' === ENTIDADES PRINCIPALES ===
+
+class User {
+    + Id : string
+    + UserName : string
+    + Email : string
+    + FirstName : string
+    + LastName : string
+    + CreatedAt : DateTime
+    + UpdatedAt : DateTime
+    + IsActive : bool
+    + ProfileImageUrl : string?
+    + RefreshToken : string?
+    + RefreshTokenExpiry : DateTime?
+    --
+    + FullName : string {computed}
+    --
+    + Client : Client?
+    + Lawyer : Lawyer?
+    + Administrator : Administrator?
+    + UserRoles : ICollection<UserRole>
+    + CreatedCases : ICollection<Case>
+    + UploadedDocuments : ICollection<CaseDocument>
+    + CaseActivities : ICollection<CaseActivity>
+    + BlogPosts : ICollection<BlogPost>
+    + FAQs : ICollection<FAQ>
+    + AuditLogs : ICollection<AuditLog>
+}
+
+class Client {
+    + Id : int
+    + UserId : string
+    + ClientCode : string
+    + CompanyName : string?
+    + IsCompany : bool
+    + TaxId : string?
+    + Address : string?
+    + City : string?
+    + State : string?
+    + PostalCode : string?
+    + Country : string
+    + EmergencyContactName : string?
+    + EmergencyContactPhone : string?
+    + PreferredContactMethod : string
+    + Notes : string?
+    + IsActive : bool
+    + CreatedAt : DateTime
+    + UpdatedAt : DateTime
+    --
+    + DisplayName : string {computed}
+    --
+    + User : User
+    + Cases : ICollection<Case>
+    + Invoices : ICollection<Invoice>
+    + Testimonials : ICollection<Testimonial>
+}
+
+class Lawyer {
+    + Id : int
+    + UserId : string
+    + LawyerCode : string
+    + LicenseNumber : string
+    + Specializations : string?
+    + YearsOfExperience : int
+    + Education : string?
+    + Certifications : string?
+    + HourlyRate : decimal?
+    + IsPartner : bool
+    + HireDate : DateTime?
+    + Department : string?
+    + OfficeLocation : string?
+    + Biography : string?
+    + LinkedInProfile : string?
+    + IsActive : bool
+    + IsAvailableForNewCases : bool
+    + CreatedAt : DateTime
+    + UpdatedAt : DateTime
+    --
+    + FullName : string {computed}
+    + DisplayTitle : string {computed}
+    --
+    + User : User
+    + PrimaryCases : ICollection<Case>
+    + CaseLawyers : ICollection<CaseLawyer>
+    + VacationRequests : ICollection<VacationRequest>
+    + AssignedInquiries : ICollection<ClientInquiry>
+}
+
+class Administrator {
+    + Id : int
+    + UserId : string
+    + AdminCode : string
+    + Department : string?
+    + AccessLevel : int
+    + Permissions : string?
+    + LastLoginAt : DateTime?
+    + IsActive : bool
+    + CreatedAt : DateTime
+    + UpdatedAt : DateTime
+    --
+    + AccessLevelName : string {computed}
+    --
+    + User : User
+}
+
+' === ENTIDADES DE CASOS ===
+
+class Case {
+    + Id : int
+    + CaseNumber : string
+    + Title : string
+    + Description : string?
+    + ClientId : int
+    + PrimaryLawyerId : int
+    + ServiceTypeId : int
+    + StatusId : int
+    + Priority : int
+    + EstimatedValue : decimal?
+    + ActualValue : decimal?
+    + EstimatedHours : int?
+    + ActualHours : int?
+    + StartDate : DateTime?
+    + EstimatedEndDate : DateTime?
+    + ActualEndDate : DateTime?
+    + CourtName : string?
+    + JudgeName : string?
+    + OpposingParty : string?
+    + OpposingLawyer : string?
+    + Notes : string?
+    + IsActive : bool
+    + CreatedAt : DateTime
+    + UpdatedAt : DateTime
+    + CreatedBy : string?
+    --
+    + PriorityName : string {computed}
+    + IsCompleted : bool {computed}
+    + IsOverdue : bool {computed}
+    --
+    + Client : Client
+    + PrimaryLawyer : Lawyer
+    + ServiceType : ServiceType
+    + Status : CaseStatus
+    + CreatedByUser : User?
+    + CaseLawyers : ICollection<CaseLawyer>
+    + Documents : ICollection<CaseDocument>
+    + Activities : ICollection<CaseActivity>
+    + Invoices : ICollection<Invoice>
+}
+
+class CaseStatus {
+    + Id : int
+    + Name : string
+    + Description : string?
+    + Color : string?
+    + IsActive : bool
+    + CreatedAt : DateTime
+    --
+    + Cases : ICollection<Case>
+}
+
+class CaseLawyer {
+    + Id : int
+    + CaseId : int
+    + LawyerId : int
+    + Role : string
+    + AssignedAt : DateTime
+    + AssignedBy : string?
+    + IsActive : bool
+    --
+    + Case : Case
+    + Lawyer : Lawyer
+    + AssignedByUser : User?
+}
+
+class CaseActivity {
+    + Id : int
+    + CaseId : int
+    + ActivityType : string
+    + Title : string
+    + Description : string?
+    + ActivityDate : DateTime
+    + Duration : int?
+    + Location : string?
+    + Participants : string?
+    + BillableHours : decimal
+    + HourlyRate : decimal?
+    + TotalCost : decimal?
+    + CreatedBy : string
+    + CreatedAt : DateTime
+    + IsActive : bool
+    --
+    + Case : Case
+    + CreatedByUser : User
+}
+
+class CaseDocument {
+    + Id : int
+    + CaseId : int
+    + DocumentTypeId : int
+    + FileName : string
+    + OriginalFileName : string
+    + FilePath : string
+    + FileSize : long?
+    + MimeType : string?
+    + Description : string?
+    + UploadedBy : string
+    + UploadedAt : DateTime
+    + IsConfidential : bool
+    + IsActive : bool
+    --
+    + FileSizeFormatted : string {computed}
+    --
+    + Case : Case
+    + UploadedByUser : User
+}
+
+' === ENTIDADES DE SERVICIOS Y FACTURACIÓN ===
+
+class ServiceType {
+    + Id : int
+    + Name : string
+    + Description : string?
+    + BasePrice : decimal?
+    + IsActive : bool
+    + CreatedAt : DateTime
+    + UpdatedAt : DateTime
+    --
+    + Cases : ICollection<Case>
+    + Inquiries : ICollection<ClientInquiry>
+}
+
+class Invoice {
+    + Id : int
+    + InvoiceNumber : string
+    + ClientId : int
+    + CaseId : int?
+    + IssueDate : DateTime
+    + DueDate : DateTime
+    + Subtotal : decimal
+    + TaxRate : decimal
+    + TaxAmount : decimal
+    + Total : decimal
+    + Status : string
+    + Notes : string?
+    + CreatedBy : string
+    + CreatedAt : DateTime
+    + UpdatedAt : DateTime
+    --
+    + IsOverdue : bool {computed}
+    + PaidAmount : decimal {computed}
+    + RemainingAmount : decimal {computed}
+    + IsFullyPaid : bool {computed}
+    --
+    + Client : Client
+    + Case : Case?
+    + CreatedByUser : User
+}
+
+' === ENTIDADES DE CONTENIDO ===
+
+class BlogPost {
+    + Id : int
+    + Title : string
+    + Slug : string
+    + Excerpt : string?
+    + Content : string
+    + FeaturedImageUrl : string?
+    + CategoryId : int
+    + AuthorId : string
+    + Status : string
+    + PublishedAt : DateTime?
+    + ViewCount : int
+    + LikeCount : int
+    + MetaTitle : string?
+    + MetaDescription : string?
+    + Tags : string?
+    + IsActive : bool
+    + CreatedAt : DateTime
+    + UpdatedAt : DateTime
+    --
+    + StatusName : string {computed}
+    + IsPublished : bool {computed}
+    + ReadingTime : string {computed}
+    --
+    + Author : User
+}
+
+class FAQ {
+    + Id : int
+    + Question : string
+    + Answer : string
+    + Category : string?
+    + DisplayOrder : int
+    + ViewCount : int
+    + IsActive : bool
+    + CreatedBy : string
+    + CreatedAt : DateTime
+    + UpdatedAt : DateTime
+    --
+    + CreatedByUser : User
+}
+
+class Testimonial {
+    + Id : int
+    + ClientId : int?
+    + ClientName : string
+    + ClientTitle : string?
+    + Content : string
+    + Rating : int
+    + IsAnonymous : bool
+    + IsApproved : bool
+    + ApprovedBy : string?
+    + ApprovedAt : DateTime?
+    + IsActive : bool
+    + CreatedAt : DateTime
+    + UpdatedAt : DateTime
+    --
+    + RatingStars : string {computed}
+    + StatusName : string {computed}
+    --
+    + Client : Client?
+    + ApprovedByUser : User?
+}
+
+' === ENTIDADES DE CONSULTAS Y ADMINISTRACIÓN ===
+
+class ClientInquiry {
+    + Id : int
+    + FirstName : string
+    + LastName : string
+    + Email : string
+    + Phone : string?
+    + Company : string?
+    + ServiceTypeId : int?
+    + Subject : string
+    + Message : string
+    + StatusId : int
+    + Priority : int
+    + AssignedToId : int?
+    + Source : string
+    + CreatedAt : DateTime
+    + UpdatedAt : DateTime
+    --
+    + ServiceType : ServiceType?
+    + AssignedTo : Lawyer?
+}
+
+class VacationRequest {
+    + Id : int
+    + LawyerId : int
+    + StartDate : DateTime
+    + EndDate : DateTime
+    + TotalDays : int
+    + RequestType : string
+    + Reason : string?
+    + Status : string
+    + RequestedAt : DateTime
+    + ReviewedBy : string?
+    + ReviewedAt : DateTime?
+    + ReviewComments : string?
+    + IsActive : bool
+    --
+    + RequestTypeName : string {computed}
+    + StatusName : string {computed}
+    --
+    + Lawyer : Lawyer
+    + ReviewedByUser : User?
+}
+
+' === ENTIDADES DE ROLES Y AUDITORÍA ===
+
+class Role {
+    + Id : int
+    + Name : string
+    + Description : string?
+    + CreatedAt : DateTime
+    + UpdatedAt : DateTime
+    --
+    + UserRoles : ICollection<UserRole>
+}
+
+class UserRole {
+    + UserId : string
+    + RoleId : int
+    + AssignedAt : DateTime
+    + AssignedBy : string?
+    --
+    + User : User
+    + Role : Role
+    + AssignedByUser : User?
+}
+
+class SystemSetting {
+    + Id : int
+    + SettingKey : string
+    + SettingValue : string?
+    + Description : string?
+    + IsActive : bool
+    + CreatedAt : DateTime
+    + UpdatedAt : DateTime
+    + UpdatedBy : string?
+    --
+    + UpdatedByUser : User?
+}
+
+class AuditLog {
+    + Id : int
+    + UserId : string?
+    + UserName : string?
+    + Action : string
+    + EntityName : string
+    + EntityId : string?
+    + OldValues : string?
+    + NewValues : string?
+    + IpAddress : string?
+    + UserAgent : string?
+    + Timestamp : DateTime
+    --
+    + User : User?
+}
+
+' === RELACIONES PRINCIPALES ===
+
+' Relaciones User
+User ||--o{ Client : "1 to 0..1"
+User ||--o{ Lawyer : "1 to 0..1"
+User ||--o{ Administrator : "1 to 0..1"
+User ||--o{ UserRole : "1 to many"
+User ||--o{ Case : "creates"
+User ||--o{ CaseDocument : "uploads"
+User ||--o{ CaseActivity : "creates"
+User ||--o{ BlogPost : "authors"
+User ||--o{ FAQ : "creates"
+User ||--o{ AuditLog : "generates"
+
+' Relaciones Client
+Client ||--o{ Case : "1 to many"
+Client ||--o{ Invoice : "1 to many"
+Client ||--o{ Testimonial : "1 to many"
+
+' Relaciones Lawyer
+Lawyer ||--o{ Case : "primary lawyer"
+Lawyer ||--o{ CaseLawyer : "1 to many"
+Lawyer ||--o{ VacationRequest : "1 to many"
+Lawyer ||--o{ ClientInquiry : "assigned to"
+
+' Relaciones Case
+Case ||--|| CaseStatus : "has status"
+Case ||--|| ServiceType : "has type"
+Case ||--o{ CaseLawyer : "1 to many"
+Case ||--o{ CaseDocument : "1 to many"
+Case ||--o{ CaseActivity : "1 to many"
+Case ||--o{ Invoice : "1 to many"
+
+' Relaciones Role
+Role ||--o{ UserRole : "1 to many"
+
+' Relaciones ServiceType
+ServiceType ||--o{ ClientInquiry : "1 to many"
+
+@enduml
