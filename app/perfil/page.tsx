@@ -23,31 +23,6 @@ import { useClientDashboard } from "@/hooks/useClientDashboard";
 import Link from "next/link";
 import { GradientBackground } from '@/components/animate-ui/backgrounds/gradient';
 
-interface RecentActivity {
-  id: number;
-  activityType: string;
-  title: string;
-  description: string;
-  caseTitle?: string;
-  activityDate: string;
-  createdAt: string; 
-}
-
-interface Appointment {
-  id: number;
-  title: string;
-  description: string;
-  scheduledDate: string;
-  location?: string;
-  isConfirmed: boolean;
-}
-
-interface CaseStatus {
-  status: string;
-  count: number;
-  color: string;
-}
-
 // Optimización: Mover funciones fuera del componente para evitar re-creación
 function getInitials(name: string): string {
   return name

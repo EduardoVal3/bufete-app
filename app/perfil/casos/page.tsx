@@ -169,7 +169,6 @@ export default function CasosPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [totalCount, setTotalCount] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
   
   // Estados de filtros
   const [searchTerm, setSearchTerm] = useState("")
@@ -222,7 +221,6 @@ export default function CasosPage() {
       
       setCases(mappedCases);
       setTotalCount(response.data.totalCount || 0);
-      setCurrentPage(response.data.currentPage || 1);
       
     } catch (error: unknown) {
       console.error('Error fetching cases:', error);
