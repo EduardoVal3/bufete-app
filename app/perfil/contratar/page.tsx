@@ -27,7 +27,6 @@ import {
   Heart,
   CheckCircle,
   Clock,
-  Star,
   Loader2,
 } from "lucide-react"
 import { toast } from "sonner"
@@ -204,10 +203,11 @@ export default function ContratarPage() {
         })
         setSelectedService(null)
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error al crear caso:', error)
-      const errorMessage = error.response?.data?.message || 
-                          error.response?.data?.errors || 
+      const axiosError = error as { response?: { data?: { message?: string; errors?: string } } };
+      const errorMessage = axiosError.response?.data?.message || 
+                          axiosError.response?.data?.errors || 
                           "No se pudo crear el caso. Inténtalo más tarde."
       
       toast.error("Error al crear caso", {

@@ -44,7 +44,6 @@ import {
   AlertTriangle,
   ChevronLeft,
   ChevronRight,
-  X,
   Loader2,
 } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -1280,7 +1279,7 @@ export default function AbogadosPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta acción eliminará permanentemente al abogado "{lawyerToDelete?.fullName}" del sistema.
+              Esta acción eliminará permanentemente al abogado &quot;{lawyerToDelete?.fullName}&quot; del sistema.
               Esta acción no se puede deshacer.
             </AlertDialogDescription>
           </AlertDialogHeader>

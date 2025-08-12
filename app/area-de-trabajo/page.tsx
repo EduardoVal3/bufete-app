@@ -25,8 +25,6 @@ import {
 import Link from "next/link"
 
 export default function AreaDeTrabajo() {
-  const { user } = useAuth()
-
   // Datos simulados para el dashboard del abogado - Dr. Juan Pérez
   const lawyerStats = {
     totalCases: 24,

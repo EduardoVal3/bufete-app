@@ -1,6 +1,5 @@
 "use client"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Users, Briefcase, DollarSign, FileText, AlertTriangle, CheckCircle, TrendingUp, BarChart3 } from "lucide-react"
 import { useDashboard } from "@/hooks/useDashboard"
@@ -108,12 +107,6 @@ export default function DashboardPage() {
       </div>
     );
   }
-
-  // Calcular crecimiento porcentual (simulado basado en datos del mes)
-  const calculateGrowthPercentage = (currentMonth: number, total: number) => {
-    if (total === 0) return 0;
-    return Math.round((currentMonth / total) * 100);
-  };
 
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">

@@ -23,37 +23,6 @@ import { useClientDashboard } from "@/hooks/useClientDashboard";
 import Link from "next/link";
 import { GradientBackground } from '@/components/animate-ui/backgrounds/gradient';
 
-interface ClientProfile {
-  id: number;
-  fullName: string;
-  email: string;
-  phone?: string;
-  address?: string;
-  dateOfBirth?: string;
-  occupation?: string;
-  companyName?: string;
-  clientCode: string;
-  isActive: boolean;
-  createdAt: string;
-  totalCases: number;
-  activeCases: number;
-  totalBilled: number;
-  pendingPayments: number;
-}
-
-interface ClientDashboard {
-  myCases: number;
-  activeCases: number;
-  completedCases: number;
-  totalInvoices: number;
-  pendingInvoices: number;
-  paidInvoices: number;
-  totalAmountDue: number;
-  recentActivities: RecentActivity[];
-  upcomingAppointments: Appointment[];
-  casesByStatus: CaseStatus[];
-}
-
 interface RecentActivity {
   id: number;
   activityType: string;
@@ -79,16 +48,6 @@ interface CaseStatus {
   color: string;
 }
 
-interface Notification {
-  id: number;
-  title: string;
-  message: string;
-  type: string;
-  isRead: boolean;
-  createdAt: string;
-  relatedCaseId?: number;
-}
-
 // Optimización: Mover funciones fuera del componente para evitar re-creación
 function getInitials(name: string): string {
   return name
@@ -100,7 +59,7 @@ function getInitials(name: string): string {
 }
 
 function getActivityIcon(activityType: string) {
-  const iconMap: Record<string, any> = {
+  const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
     document: FileText,
     meeting: Calendar,
     payment: CreditCard,

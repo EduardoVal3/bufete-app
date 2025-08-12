@@ -186,7 +186,7 @@ export default function ServiciosPage() {
   }
 
   const getCategoriaIcon = (categoria: string) => {
-    const icons: Record<string, any> = {
+    const icons: Record<string, React.ComponentType<{ className?: string }>> = {
       Legal: Scale,
       Empresarial: Building,
       Fiscal: DollarSign,

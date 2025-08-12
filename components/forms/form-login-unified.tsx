@@ -26,7 +26,7 @@ interface LoginResponse {
     isActive: boolean;
     createdAt: string;
     lastLoginAt?: string;
-    roles: any[];
+    roles: { id: string; name: string }[];
   };
   role: string;
   expiresAt: string;
@@ -57,7 +57,7 @@ export function UnifiedLoginForm({
       console.log("Login response:", response.data);
       
       if (response.data.token) {
-        const { token, refreshToken, user, role } = response.data;
+        const { token, refreshToken, role } = response.data;
         
         // Almacenar tokens
         localStorage.setItem("token", token);

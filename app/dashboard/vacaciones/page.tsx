@@ -192,7 +192,7 @@ export default function VacacionesPage() {
   }
 
   const getEstadoIcon = (estado: string) => {
-    const icons: Record<string, any> = {
+    const icons: Record<string, React.ComponentType<{ className?: string }>> = {
       Aprobada: CheckCircle,
       Pendiente: AlertCircle,
       Rechazada: XCircle,
@@ -202,7 +202,7 @@ export default function VacacionesPage() {
   }
 
   const getTipoIcon = (tipo: string) => {
-    const icons: Record<string, any> = {
+    const icons: Record<string, React.ComponentType<{ className?: string }>> = {
       Vacaciones: Plane,
       "Permiso Personal": User,
       "Licencia Médica": AlertCircle,

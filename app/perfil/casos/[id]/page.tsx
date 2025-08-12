@@ -18,17 +18,14 @@ import {
   Phone,
   Mail,
   MapPin,
-  Calendar,
   Clock,
   CheckCircle,
   XCircle,
   AlertCircle,
   MessageSquare,
-  Upload,
   User,
   CreditCard,
   ArrowLeft,
-  Star,
   Award,
 } from "lucide-react"
 import { toast } from "sonner"

@@ -203,13 +203,6 @@ export default function CasosPage() {
     return colors[prioridad] || "text-gray-600"
   }
 
-  const getProgresoColor = (progreso: number) => {
-    if (progreso >= 80) return "bg-green-500"
-    if (progreso >= 50) return "bg-blue-500"
-    if (progreso >= 25) return "bg-yellow-500"
-    return "bg-red-500"
-  }
-
   const totalCasos = casos.length
   const casosActivos = casos.filter((c) => c.estado === "En Proceso" || c.estado === "Urgente").length
   const casosUrgentes = casos.filter((c) => c.estado === "Urgente").length

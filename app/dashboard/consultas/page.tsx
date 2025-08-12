@@ -217,7 +217,7 @@ export default function ConsultasPage() {
   }
 
   const getEstadoIcon = (estado: string) => {
-    const icons: Record<string, any> = {
+    const icons: Record<string, React.ComponentType<{ className?: string }>> = {
       Pendiente: AlertCircle,
       "En Proceso": Clock,
       Respondida: CheckCircle,

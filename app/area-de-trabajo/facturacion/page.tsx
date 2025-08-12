@@ -45,15 +45,6 @@ interface Invoice {
   notes?: string
 }
 
-interface PaymentRecord {
-  id: string
-  invoiceId: string
-  amount: number
-  date: string
-  method: string
-  reference: string
-}
-
 export default function FacturacionPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")

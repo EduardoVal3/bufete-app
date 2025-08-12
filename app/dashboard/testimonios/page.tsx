@@ -196,7 +196,7 @@ export default function TestimoniosPage() {
   }
 
   const getEstadoIcon = (estado: string) => {
-    const icons: Record<string, any> = {
+    const icons: Record<string, React.ComponentType<{ className?: string }>> = {
       Aprobado: CheckCircle,
       Pendiente: Clock,
       Rechazado: XCircle,

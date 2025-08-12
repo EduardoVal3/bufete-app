@@ -62,15 +62,23 @@ interface ApiCase {
   totalActivities: number
   totalDocuments: number
   lastActivity: string | null
-  recentActivities: any[]
-  documents: any[]
+  recentActivities: Activity[]
+  documents: Document[]
 }
 
-interface ApiResponse {
-  data: ApiCase[]
-  totalCount: number
-  pageSize: number
-  currentPage: number
+interface Activity {
+  id: string
+  type: string
+  description: string
+  date: string
+}
+
+interface Document {
+  id: string
+  name: string
+  type: string
+  url: string
+  uploadDate: string
 }
 
 // Funciones de mapeo
@@ -216,21 +224,16 @@ export default function CasosPage() {
       setTotalCount(response.data.totalCount || 0);
       setCurrentPage(response.data.currentPage || 1);
       
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error fetching cases:', error);
-      console.error('Error response:', error.response?.data);
-      console.error('Error status:', error.response?.status);
+      const axiosError = error as { response?: { data?: unknown; status?: number } };
+      console.error('Error response:', axiosError.response?.data);
+      console.error('Error status:', axiosError.response?.status);
       
       let errorMessage = 'Error al cargar los casos';
       
-      if (error.response?.status === 404) {
+      if (axiosError.response?.status === 404) {
         errorMessage = 'Endpoint no encontrado. Verifica la configuración del servidor.';
-      } else if (error.response?.status === 401) {
-        errorMessage = 'No estás autenticado. Por favor inicia sesión nuevamente.';
-      } else if (error.response?.status === 403) {
-        errorMessage = 'No tienes permisos para ver estos casos.';
-      } else if (error.response?.data?.message) {
-        errorMessage = error.response.data.message;
       }
       
       setError(errorMessage);
@@ -358,9 +361,10 @@ export default function CasosPage() {
                     const response = await api.get('/Cases/my-cases');
                     console.log('Respuesta del endpoint básico:', response.data);
                     alert('Endpoint funciona! Ver consola para detalles.');
-                  } catch (err: any) {
+                  } catch (err: unknown) {
                     console.error('Error en endpoint básico:', err);
-                    alert(`Error: ${err.response?.status} - ${err.response?.statusText}`);
+                    const axiosError = err as { response?: { status?: number; statusText?: string } };
+                    alert(`Error: ${axiosError.response?.status} - ${axiosError.response?.statusText}`);
                   }
                 }}
               >
